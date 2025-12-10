@@ -1,0 +1,11 @@
+{
+  "name": "invitacion-angie",
+  "version": "1.0.0",
+  "description": "Una invitación romántica especial para Angie",
+  "scripts": {
+    "start": "echo 'Abre index.html en tu navegador' && start index.html"
+  },
+  "keywords": ["romantic", "invitation", "web-app"],
+  "author": "",
+  "license": "MIT"
+}
