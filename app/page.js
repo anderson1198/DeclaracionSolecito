@@ -162,6 +162,9 @@ export default function Home() {
                     </div>
                 )}
             </main>
+
+            {/* Version indicator */}
+            <div className={styles.version}>v1.0</div>
         </>
     );
 }
