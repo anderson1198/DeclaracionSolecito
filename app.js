@@ -54,6 +54,9 @@ let noClickAttempts = 0;
 
 // Handle Yes button
 yesBtn.addEventListener('click', () => {
+    // Enviar notificación por email
+    sendEmailNotification();
+
     questionCard.style.animation = 'cardEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) reverse';
 
     setTimeout(() => {
@@ -62,6 +65,28 @@ yesBtn.addEventListener('click', () => {
         createConfetti();
     }, 500);
 });
+
+// Función para enviar notificación por email
+async function sendEmailNotification() {
+    try {
+        const response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            console.log('✅ Notificación enviada exitosamente!');
+        } else {
+            console.error('❌ Error al enviar notificación:', data.error);
+        }
+    } catch (error) {
+        console.error('❌ Error al enviar notificación:', error);
+    }
+}
 
 // Handle No button - make it move away
 noBtn.addEventListener('mouseover', (e) => {
