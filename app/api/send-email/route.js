@@ -3,14 +3,24 @@ import nodemailer from 'nodemailer';
 
 export async function POST() {
     try {
-        const port = Number(process.env.MAIL_PORT || 587);
+        const host = (process.env.MAIL_HOST || '').trim();
+        const port = Number((process.env.MAIL_PORT || '587').trim());
+        const user = (process.env.MAIL_USERNAME || '').trim();
+        const pass = (process.env.MAIL_PASSWORD || '').trim();
+        const from = (process.env.MAIL_FROM || '').trim();
+        const to = (process.env.MAIL_TO || '').trim();
+
+        if (!host) throw new Error('MAIL_HOST no configurado');
+        if (!from) throw new Error('MAIL_FROM no configurado');
+        if (!to) throw new Error('MAIL_TO no configurado');
+
         const transporter = nodemailer.createTransport({
-            host: process.env.MAIL_HOST,
+            host,
             port,
             secure: port === 465,
             auth: {
-                user: process.env.MAIL_USERNAME,
-                pass: process.env.MAIL_PASSWORD,
+                user,
+                pass,
             },
             tls: {
                 rejectUnauthorized: false,
@@ -24,8 +34,8 @@ export async function POST() {
         });
 
         const mailOptions = {
-            from: `"Invitaci\u00f3n para Angie \u2600\uFE0F" <${process.env.MAIL_FROM}>`,
-            to: process.env.MAIL_TO,
+            from: `"Invitaci\u00f3n para Angie \u2600\uFE0F" <${from}>`,
+            to,
             subject: '\u00a1Angie dijo que S\u00cd! \u2600\uFE0F',
             html: `
                 <!DOCTYPE html>

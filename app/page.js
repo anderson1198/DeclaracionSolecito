@@ -199,7 +199,7 @@ export default function Home() {
         )}
       </main>
 
-      <div className={styles.version}>v1.1</div>
+      <div className={styles.version}>v1.2</div>
     </>
   );
 }
