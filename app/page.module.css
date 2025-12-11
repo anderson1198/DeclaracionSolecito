@@ -137,12 +137,24 @@
 .title {
     font-family: var(--font-pacifico, 'Pacifico', cursive);
     font-size: 3rem;
+    margin-bottom: 30px;
+    animation: titlePulse 2s ease-in-out infinite;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.titleText {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 30px;
-    animation: titlePulse 2s ease-in-out infinite;
+}
+
+.titleEmoji {
+    color: #f5576c;
+    text-shadow: none;
+    filter: none;
 }
 
 @keyframes titlePulse {
