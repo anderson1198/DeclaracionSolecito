@@ -1,57 +1,60 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css';
+
+const HEART_SYMBOLS = ['\u2764', '\u2728', '\u2665', '\u2763', '\u2764\uFE0F', '\u2661'];
 
 export default function Home() {
     const [showSuccess, setShowSuccess] = useState(false);
-    const [noPosition, setNoPosition] = useState({ left: 'auto', right: '100px', top: 'auto', bottom: '200px' });
+    const [noPosition, setNoPosition] = useState({
+        left: 'auto',
+        right: '100px',
+        top: 'auto',
+        bottom: '200px',
+    });
     const [noClickAttempts, setNoClickAttempts] = useState(0);
     const [yesScale, setYesScale] = useState(1);
 
     useEffect(() => {
-        // Create floating hearts
         const heartContainer = document.getElementById('heartContainer');
-        const heartSymbols = ['❤️', '💕', '💖', '💗', '💝', '💓'];
 
         const interval = setInterval(() => {
-            if (heartContainer) {
-                const heart = document.createElement('div');
-                heart.style.position = 'absolute';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.bottom = '-50px';
-                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-                heart.style.opacity = String(Math.random() * 0.5 + 0.3);
-                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-                heart.style.pointerEvents = 'none';
-                heart.style.animation = `floatUp ${Math.random() * 3 + 4}s linear`;
+            if (!heartContainer) return;
 
-                heartContainer.appendChild(heart);
+            const heart = document.createElement('div');
+            heart.style.position = 'absolute';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.bottom = '-50px';
+            heart.style.fontSize = `${Math.random() * 20 + 20}px`;
+            heart.style.opacity = String(Math.random() * 0.5 + 0.3);
+            heart.textContent = HEART_SYMBOLS[Math.floor(Math.random() * HEART_SYMBOLS.length)];
+            heart.style.pointerEvents = 'none';
+            heart.style.animation = `floatUp ${Math.random() * 3 + 4}s linear`;
 
-                setTimeout(() => {
-                    heart.remove();
-                }, 7000);
-            }
+            heartContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
         }, 500);
 
         return () => clearInterval(interval);
     }, []);
 
     const handleYesClick = async () => {
-        // Send email notification
         try {
             await fetch('/api/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
             });
-            console.log('✅ Notificación enviada exitosamente!');
+            console.log('Notificaci\u00f3n enviada exitosamente');
         } catch (error) {
-            console.error('❌ Error al enviar notificación:', error);
+            console.error('Error al enviar notificaci\u00f3n:', error);
         }
 
-        // Show success card
         setShowSuccess(true);
         createConfetti();
     };
@@ -77,7 +80,7 @@ export default function Home() {
         }
 
         setNoPosition({ left: `${newX}px`, top: `${newY}px`, right: 'auto', bottom: 'auto' });
-        setYesScale(1 + (newAttempts * 0.1));
+        setYesScale(1 + newAttempts * 0.1);
     };
 
     const createConfetti = () => {
@@ -88,7 +91,7 @@ export default function Home() {
             setTimeout(() => {
                 const confetti = document.createElement('div');
                 confetti.style.position = 'fixed';
-                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.left = `${Math.random() * 100}%`;
                 confetti.style.top = '-10px';
                 confetti.style.width = '10px';
                 confetti.style.height = '10px';
@@ -118,13 +121,14 @@ export default function Home() {
                         <div className={styles.sunContainer}>
                             <img src="/solecito.svg" alt="Solecito" className={styles.sunIcon} />
                         </div>
-                        <h1 className={styles.title}>Hola Angie 💕</h1>
+                        <h1 className={styles.title}>{'Hola Angie \uD83E\uDD70'}</h1>
                         <div className={styles.questionContainer}>
                             <p className={styles.question}>
-                                ¿Te gustaría salir conmigo? Déjame ser el{' '}
-                                <span style={{ color: 'rgb(237, 163, 5)' }}>SOLECITO</span> que le dé luz a tus días.
+                                {'\u00bfTe gustar\u00eda salir conmigo? D\u00e9jame ser el '}
+                                <span style={{ color: 'rgb(237, 163, 5)' }}>SOLECITO</span>
+                                {' que le d\u00e9 luz a tus d\u00edas.'}
                             </p>
-                            <div className={styles.emoji}>😊✨</div>
+                            <div className={styles.emoji}>{'\u2600\uFE0F \u263A'}</div>
                         </div>
 
                         <div className={styles.buttonsContainer}>
@@ -133,13 +137,19 @@ export default function Home() {
                                 onClick={handleYesClick}
                                 style={{ transform: `scale(${yesScale})` }}
                             >
-                                <span className={styles.btnText}>¡Sí! 💖</span>
+                                <span className={styles.btnText}>{'\u00a1S\u00ed! \u2764'}</span>
                             </button>
                             <button
                                 className={`${styles.btn} ${styles.btnNo}`}
                                 onMouseEnter={moveNoButton}
-                                onClick={(e) => { e.preventDefault(); moveNoButton(); }}
-                                onTouchStart={(e) => { e.preventDefault(); moveNoButton(); }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    moveNoButton();
+                                }}
+                                onTouchStart={(e) => {
+                                    e.preventDefault();
+                                    moveNoButton();
+                                }}
                                 style={{ ...noPosition }}
                             >
                                 <span className={styles.btnText}>No</span>
@@ -148,22 +158,25 @@ export default function Home() {
                     </div>
                 ) : (
                     <div className={`${styles.card} ${styles.successCard}`}>
-                        <div className={styles.celebration}>🎉</div>
-                        <h1 className={styles.successTitle}>¡Qué felicidad! 💕</h1>
-                        <p className={styles.successMessage}>No sabes lo feliz que me hace tu respuesta ✨</p>
-                        <p className={styles.successMessage}>¡Será el inicio de algo increíble! 🌟</p>
+                        <div className={styles.celebration}>{'\uD83C\uDF89'}</div>
+                        <h1 className={styles.successTitle}>{'\u00a1Qu\u00e9 felicidad! \uD83E\uDD73'}</h1>
+                        <p className={styles.successMessage}>
+                            {'No sabes lo feliz que me hace tu respuesta \u263A'}
+                        </p>
+                        <p className={styles.successMessage}>
+                            {'\u00a1Ser\u00e1 el inicio de algo incre\u00edble! \u2728'}
+                        </p>
                         <div className={styles.heartsCelebration}>
-                            <span className={styles.heart}>❤️</span>
-                            <span className={styles.heart}>💖</span>
-                            <span className={styles.heart}>💕</span>
-                            <span className={styles.heart}>💗</span>
-                            <span className={styles.heart}>💝</span>
+                            <span className={styles.heart}>{'\u2764'}</span>
+                            <span className={styles.heart}>{'\u2763'}</span>
+                            <span className={styles.heart}>{'\u2764'}</span>
+                            <span className={styles.heart}>{'\u2665'}</span>
+                            <span className={styles.heart}>{'\u2661'}</span>
                         </div>
                     </div>
                 )}
             </main>
 
-            {/* Version indicator */}
             <div className={styles.version}>v1.0</div>
         </>
     );

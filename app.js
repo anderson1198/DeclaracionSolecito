@@ -1,15 +1,15 @@
 // Create floating hearts in background
 function createFloatingHearts() {
     const heartContainer = document.getElementById('heartContainer');
-    const heartSymbols = ['❤️', '💕', '💖', '💗', '💝', '💓'];
+    const heartSymbols = ['\u2764', '\u2728', '\u2665', '\u2763', '\u2764\uFE0F', '\u2661'];
 
     setInterval(() => {
         const heart = document.createElement('div');
         heart.style.position = 'absolute';
-        heart.style.left = Math.random() * 100 + '%';
+        heart.style.left = `${Math.random() * 100}%`;
         heart.style.bottom = '-50px';
-        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-        heart.style.opacity = Math.random() * 0.5 + 0.3;
+        heart.style.fontSize = `${Math.random() * 20 + 20}px`;
+        heart.style.opacity = String(Math.random() * 0.5 + 0.3);
         heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
         heart.style.pointerEvents = 'none';
         heart.style.animation = `floatUp ${Math.random() * 3 + 4}s linear`;
@@ -22,7 +22,6 @@ function createFloatingHearts() {
     }, 500);
 }
 
-// Add floating animation
 const style = document.createElement('style');
 style.textContent = `
     @keyframes floatUp {
@@ -44,7 +43,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initialize app
 const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
 const questionCard = document.getElementById('questionCard');
@@ -52,9 +50,7 @@ const successCard = document.getElementById('successCard');
 
 let noClickAttempts = 0;
 
-// Handle Yes button
 yesBtn.addEventListener('click', () => {
-    // Enviar notificación por email
     sendEmailNotification();
 
     questionCard.style.animation = 'cardEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) reverse';
@@ -66,30 +62,28 @@ yesBtn.addEventListener('click', () => {
     }, 500);
 });
 
-// Función para enviar notificación por email
 async function sendEmailNotification() {
     try {
         const response = await fetch('/api/send-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
         });
 
         const data = await response.json();
 
         if (data.success) {
-            console.log('✅ Notificación enviada exitosamente!');
+            console.log('Notificaci\u00f3n enviada exitosamente');
         } else {
-            console.error('❌ Error al enviar notificación:', data.error);
+            console.error('Error al enviar notificaci\u00f3n:', data.error);
         }
     } catch (error) {
-        console.error('❌ Error al enviar notificación:', error);
+        console.error('Error al enviar notificaci\u00f3n:', error);
     }
 }
 
-// Handle No button - make it move away
-noBtn.addEventListener('mouseover', (e) => {
+noBtn.addEventListener('mouseover', () => {
     moveNoButton();
 });
 
@@ -98,7 +92,6 @@ noBtn.addEventListener('click', (e) => {
     moveNoButton();
 });
 
-// Handle touch events for mobile
 noBtn.addEventListener('touchstart', (e) => {
     e.preventDefault();
     moveNoButton();
@@ -109,41 +102,34 @@ function moveNoButton() {
 
     const btnRect = noBtn.getBoundingClientRect();
 
-    // Use viewport dimensions for full screen movement
     const maxX = window.innerWidth - btnRect.width - 40;
     const maxY = window.innerHeight - btnRect.height - 40;
 
-    // Generate random position anywhere on screen
     let newX = Math.random() * maxX + 20;
     let newY = Math.random() * maxY + 20;
 
-    // Make sure it's far enough from current position (increased minimum distance)
     const currentX = parseFloat(noBtn.style.left || 0);
     const currentY = parseFloat(noBtn.style.top || 0);
 
     const distance = Math.sqrt(Math.pow(newX - currentX, 2) + Math.pow(newY - currentY, 2));
 
-    // If too close, generate new position far away
     if (distance < 200) {
         newX = (newX + maxX / 2) % maxX;
         newY = (newY + maxY / 2) % maxY;
     }
 
-    noBtn.style.left = newX + 'px';
-    noBtn.style.top = newY + 'px';
+    noBtn.style.left = `${newX}px`;
+    noBtn.style.top = `${newY}px`;
 
-    // Increase yes button size with each attempt
-    const newScale = 1 + (noClickAttempts * 0.1);
+    const newScale = 1 + noClickAttempts * 0.1;
     yesBtn.style.transform = `scale(${newScale})`;
 
-    // Add shake animation to no button
     noBtn.style.animation = 'shake 0.3s';
     setTimeout(() => {
         noBtn.style.animation = '';
     }, 300);
 }
 
-// Add shake animation
 const shakeStyle = document.createElement('style');
 shakeStyle.textContent = `
     @keyframes shake {
@@ -154,7 +140,6 @@ shakeStyle.textContent = `
 `;
 document.head.appendChild(shakeStyle);
 
-// Create confetti effect
 function createConfetti() {
     const colors = ['#f093fb', '#f5576c', '#feca57', '#48dbfb', '#ff9ff3'];
     const confettiCount = 50;
@@ -163,7 +148,7 @@ function createConfetti() {
         setTimeout(() => {
             const confetti = document.createElement('div');
             confetti.style.position = 'fixed';
-            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.left = `${Math.random() * 100}%`;
             confetti.style.top = '-10px';
             confetti.style.width = '10px';
             confetti.style.height = '10px';
@@ -181,7 +166,6 @@ function createConfetti() {
     }
 }
 
-// Add confetti animation
 const confettiStyle = document.createElement('style');
 confettiStyle.textContent = `
     @keyframes confettiFall {
@@ -197,10 +181,8 @@ confettiStyle.textContent = `
 `;
 document.head.appendChild(confettiStyle);
 
-// Start floating hearts
 createFloatingHearts();
 
-// Initialize no button position - start it further from the Yes button
 window.addEventListener('load', () => {
     noBtn.style.position = 'fixed';
     noBtn.style.left = 'auto';
